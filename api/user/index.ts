@@ -1,0 +1,1 @@
+export { getUserInfoApi } from './user';
