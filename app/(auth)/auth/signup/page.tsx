@@ -6,7 +6,7 @@ import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 // components
-import { SignupForm } from '@components/auth';
+import SignupForm from '@components/auth/SignupForm';
 
 export default function Page() {
   const router = useRouter();

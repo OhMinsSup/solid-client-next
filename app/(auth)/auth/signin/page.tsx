@@ -6,7 +6,7 @@ import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 // components
-import { SigninForm } from '@components/auth';
+import SigninForm from '@components/auth/SigninForm';
 
 // constants
 import { PAGE_ENDPOINTS } from '@constants/constants';

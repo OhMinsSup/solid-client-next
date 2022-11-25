@@ -1,6 +1,7 @@
 export const QUERIES_KEY = {
   AUTH: {
     SIGNUP: 'signupApi',
+    SIGNIN: 'signinApi',
   },
   ME: ['getUserInfoApi'],
   FILE: {

@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 
 // hooks
@@ -13,11 +13,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 // components
 import { LoadingIcon } from '@components/ui/Icon';
-import { ValidationMessage } from '@components/ui/Error';
+import ValidationMessage from '@components/ui/Error/ValidationMessage';
+
+// error
+import { FetchError } from '@api/client';
 
 // types
 import type { SubmitHandler } from 'react-hook-form';
-import { FetchError } from '@api/client';
 
 interface FormFieldValues {
   username: string;
@@ -38,7 +40,9 @@ const SignupForm = () => {
     };
   }, []);
 
-  const { isMutating, error, trigger } = useSignupMutation({
+  const [error, setError] = useState<Record<string, string> | null>(null);
+
+  const { isMutating, trigger } = useSignupMutation({
     onError: async (err) => {
       if (err instanceof FetchError) {
         const resp = err.response;
@@ -59,7 +63,7 @@ const SignupForm = () => {
             }))
             .exhaustive();
 
-          console.log(state);
+          setError(state.errors);
           return;
         }
       }
@@ -107,11 +111,16 @@ const SignupForm = () => {
             {...register('username')}
           />
         </label>
-
         {errors?.['username'] ? (
           <ValidationMessage
             isSubmitting={isSubmitting}
             error={errors?.['username']?.message}
+          />
+        ) : null}
+        {error?.['username'] ? (
+          <ValidationMessage
+            isSubmitting={isSubmitting}
+            error={error?.['username']}
           />
         ) : null}
         <label className="font-semibold text-black">
@@ -129,6 +138,12 @@ const SignupForm = () => {
           <ValidationMessage
             isSubmitting={isSubmitting}
             error={errors?.['email']?.message}
+          />
+        ) : null}
+        {error?.['email'] ? (
+          <ValidationMessage
+            isSubmitting={isSubmitting}
+            error={error?.['email']}
           />
         ) : null}
         <label className="font-semibold text-black">
@@ -186,11 +201,11 @@ const SignupForm = () => {
         className={classNames(
           'mt-6 inline-flex w-full flex-row items-center justify-center self-center rounded-full border border-blue-600 bg-blue-600 py-2 px-20 text-center text-sm font-semibold text-white outline outline-2 outline-offset-2 outline-transparent md:py-2.5 md:text-base',
           {
-            'cursor-not-allowed': false,
+            'cursor-not-allowed': isMutating,
           },
         )}
         type="submit"
-        disabled={false}
+        disabled={isMutating}
       >
         {isMutating && <LoadingIcon />}
         {isMutating ? 'loading...' : 'submit'}

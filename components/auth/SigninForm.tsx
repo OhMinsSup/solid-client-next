@@ -1,13 +1,22 @@
 'use client';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 
 // hooks
+import { match, P } from 'ts-pattern';
+import { schema } from '@libs/validation/schema';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 // components
 import { LoadingIcon } from '@components/ui/Icon';
-import { ValidationMessage } from '@components/ui/Error';
+import ValidationMessage from '@components/ui/Error/ValidationMessage';
+
+// api
+import { useSigninMutation } from '@api/auth';
+
+// error
+import { FetchError } from '@api/client';
 
 // types
 import type { SubmitHandler } from 'react-hook-form';
@@ -25,6 +34,8 @@ const SigninForm = () => {
     };
   }, []);
 
+  const [error, setError] = useState<Record<string, string> | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -36,8 +47,44 @@ const SigninForm = () => {
     defaultValues,
   });
 
-  const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
-    console.log(input);
+  const { isMutating, trigger } = useSigninMutation({
+    onError: async (err) => {
+      if (err instanceof FetchError) {
+        const resp = err.response;
+        const checkStatusCode = [404, 400] as number[];
+        if (checkStatusCode.includes(resp.status)) {
+          const data = err.data;
+          const errorKey = data.error;
+          const state = match(data.message)
+            .with(P.array(P.string), (data) => ({
+              errors: {
+                [errorKey]: data[0],
+              },
+            }))
+            .with(P.string, (data) => ({
+              errors: {
+                [errorKey]: data,
+              },
+            }))
+            .exhaustive();
+
+          setError(state.errors);
+          return;
+        }
+      }
+    },
+    onSuccess(data, key, config) {
+      console.log(data);
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormFieldValues> = async (input) => {
+    try {
+      const resp = await trigger(input);
+      console.log(resp);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -64,6 +111,12 @@ const SigninForm = () => {
             error={errors?.['email']?.message}
           />
         ) : null}
+        {error?.['email'] ? (
+          <ValidationMessage
+            isSubmitting={isSubmitting}
+            error={error?.['email']}
+          />
+        ) : null}
         <label className="font-semibold text-black">
           Password
           <input
@@ -81,20 +134,25 @@ const SigninForm = () => {
             error={errors?.['password']?.message}
           />
         ) : null}
+        {error?.['password'] ? (
+          <ValidationMessage
+            isSubmitting={isSubmitting}
+            error={error?.['password']}
+          />
+        ) : null}
       </div>
       <button
         className={classNames(
           'mt-6 inline-flex w-full flex-row items-center justify-center self-center rounded-full border border-blue-600 bg-blue-600 py-2 px-20 text-center text-sm font-semibold text-white outline outline-2 outline-offset-2 outline-transparent md:py-2.5 md:text-base',
           {
-            // 'cursor-not-allowed': isLoading,
+            'cursor-not-allowed': isMutating,
           },
         )}
         type="submit"
-        disabled={false}
+        disabled={isMutating}
       >
-        {/* {isLoading && <LoadingIcon />} */}
-        {/* {isLoading ? 'loading...' : 'submit'} */}
-        submit
+        {isMutating && <LoadingIcon />}
+        {isMutating ? 'loading...' : 'submit'}
       </button>
     </form>
   );
