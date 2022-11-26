@@ -6,7 +6,9 @@ import { getTargetElement } from '@libs/browser-utils/dom';
 import { optimizeAnimation } from '@utils/util';
 import { useMedia } from 'react-use';
 
-const LeftSidebar = () => {
+interface LeftSidebarProps {}
+
+function LeftSidebar(props: React.PropsWithChildren<LeftSidebarProps>) {
   const isWide = useMedia('(min-width: 1260px)', false);
   const divRef = useRef<HTMLDivElement | null>(null);
 
@@ -78,7 +80,7 @@ const LeftSidebar = () => {
                 <span>TrendingTags</span>
                 <TrendingIcon className="ml-2 h-5 w-5 fill-current opacity-50" />
               </h5>
-              {/* <TrendingTags /> */}
+              {props.children}
             </div>
             <div className="mb-5 flex flex-col items-start px-4 text-center text-sm text-gray-600">
               <hr className="my-5 h-[1px] w-[25%]" />
@@ -89,6 +91,6 @@ const LeftSidebar = () => {
       </div>
     </div>
   );
-};
+}
 
 export default LeftSidebar;
