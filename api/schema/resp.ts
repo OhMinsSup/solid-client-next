@@ -1,8 +1,8 @@
-import type { Nullable } from "./api";
-import type { FileSchema } from "./file";
-import type { UserProfileSchema, UserSchema } from "./user";
-import type { TagSchema } from "./tag";
-import type { PostSchema } from "./post";
+import type { Nullable } from './api';
+import type { FileSchema } from './file';
+import type { UserSchema } from './user';
+import type { TagSchema } from './tag';
+import type { PostSchema } from './post';
 
 export interface ListRespSchema<Item = Record<string, any>> {
   list: Item[];
@@ -24,35 +24,26 @@ export interface PostRespSchema {
   dataId: number;
 }
 
-export interface TagWithPostCountSchema extends Omit<TagSchema, "deletedAt"> {
+export interface TagWithPostCountSchema extends Omit<TagSchema, 'deletedAt'> {
   postsCount: number;
 }
 
 export interface UploadRespSchema
-  extends Omit<FileSchema, "createdAt" | "updatedAt" | "deletedAt"> {}
+  extends Omit<FileSchema, 'createdAt' | 'updatedAt' | 'deletedAt'> {}
 
 export interface FileListRespSchema
-  extends ListRespSchema<Omit<FileSchema, "deletedAt">> {}
+  extends ListRespSchema<Omit<FileSchema, 'deletedAt'>> {}
 
 export interface TagListRespSchema
   extends ListRespSchema<TagWithPostCountSchema> {}
 
-export interface PostListRespSchema
-  extends ListRespSchema<Record<string, any>> {}
-
-export type SimpleTrendingPostItemSchema = Omit<
-  PostSchema,
-  "deletedAt" | "userId"
-> & {
-  user: Pick<UserSchema, "id" | "email" | "username"> & {
-    profile: Omit<
-      UserProfileSchema,
-      "name" | "bio" | "avatarUrl" | "availableText" | "location" | "website"
-    >;
+export interface PostDetailRespSchema extends PostSchema {
+  count: {
+    postLike: number;
   };
-};
+}
 
 export interface SimpleTrendingPostsRespSchema {
-  list: SimpleTrendingPostItemSchema[];
+  list: PostDetailRespSchema[];
   hasNextPage: boolean;
 }

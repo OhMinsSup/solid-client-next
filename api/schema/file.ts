@@ -1,13 +1,13 @@
 const UPLOAD_TYPE = {
-  PROFILE: "PROFILE",
-  IMAGE: "IMAGE",
-  POST_THUMBNAIL: "POST_THUMBNAIL",
+  PROFILE: 'PROFILE',
+  IMAGE: 'IMAGE',
+  POST_THUMBNAIL: 'POST_THUMBNAIL',
 };
 
 export type UploadType = keyof typeof UPLOAD_TYPE;
 
 const MEDIA_TYPE = {
-  IMAGE: "IMAGE",
+  IMAGE: 'IMAGE',
 };
 
 export type MediaType = keyof typeof MEDIA_TYPE;

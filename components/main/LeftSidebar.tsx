@@ -1,5 +1,6 @@
 'use client';
 import React, { useRef, useState } from 'react';
+import MenuLinks from './MenuLinks';
 import { TrendingIcon } from '@components/ui/Icon';
 import { useEventListener } from '@hooks/useEventListener';
 import { getTargetElement } from '@libs/browser-utils/dom';
@@ -73,7 +74,7 @@ function LeftSidebar(props: React.PropsWithChildren<LeftSidebarProps>) {
       >
         <div className="my-5 flex flex-col overflow-y-auto overflow-x-hidden rounded-lg border bg-white py-2 text-gray-900">
           <div className="mb-10 flex-1">
-            {/* <MenuLinks /> */}
+            <MenuLinks />
             <div className="px-4">
               <hr className="my-5 border-gray-200"></hr>
               <h5 className="mb-5 flex flex-row items-center text-gray-700">

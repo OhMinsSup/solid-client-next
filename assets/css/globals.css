@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './components/icon.css';
+@import './components/link.css';
+@import './components/tab.css';
+@import './components/template.css';
+
 @layer base {
   [data-nextjs-scroll-focus-boundary] {
     display: contents;

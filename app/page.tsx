@@ -7,10 +7,23 @@ import { getUserInfoApi } from '@api/user';
 import MainTemplate from '@components/main/MainTemplate';
 
 // types
-import type { UserRespSchema } from '@api/schema/resp';
 import { getTagsApi } from '@api/tags';
+import { Serialize } from '@libs/serialize/serialize';
 
-export default async function Page() {
+import type {
+  ListRespSchema,
+  SimpleTrendingPostsRespSchema,
+  TagWithPostCountSchema,
+  UserRespSchema,
+} from '@api/schema/resp';
+import { getSimpleTrendingPostsApi } from '@api/post';
+
+export default async function Page({
+  searchParams,
+}: {
+  params?: any;
+  searchParams?: any;
+}) {
   const nextCookies = cookies();
 
   const access_token = nextCookies.get('access_token');
@@ -30,9 +43,27 @@ export default async function Page() {
     }
   }
 
-  const { result } = await getTagsApi({ limit: 5 });
+  const respTags = await getTagsApi({ limit: 5 });
 
-  const tags = result?.result?.list ?? [];
+  const t1 = Serialize.default<ListRespSchema<TagWithPostCountSchema>>({
+    data: respTags,
+  });
 
-  return <MainTemplate tags={tags}>메인</MainTemplate>;
+  const tags = t1?.list ?? [];
+
+  const respTrending = await getSimpleTrendingPostsApi({
+    dateType: searchParams?.dateType || '1W',
+  });
+
+  const t2 = Serialize.default<SimpleTrendingPostsRespSchema>({
+    data: respTrending,
+  });
+
+  const trending = t2?.list ?? [];
+
+  return (
+    <MainTemplate tags={tags} postList={trending}>
+      메인
+    </MainTemplate>
+  );
 }

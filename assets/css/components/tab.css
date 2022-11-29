@@ -1,0 +1,11 @@
+.tab-list-base {
+  @apply mb-4 flex flex-row items-center overflow-auto whitespace-nowrap border-b text-sm text-gray-500;
+}
+
+.tab-base {
+  @apply mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 border-transparent px-2 py-3 font-semibold;
+}
+
+.tab-base.active {
+  @apply border-b-blue-500 text-blue-500;
+}

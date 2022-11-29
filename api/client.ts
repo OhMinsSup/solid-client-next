@@ -8,6 +8,7 @@ export interface RequestConfig {
   headers?: HeadersInit;
   cache?: RequestCache;
   signal?: AbortSignal;
+  next?: NextFetchRequestConfig;
 }
 
 export class FetchError extends Error {
@@ -75,6 +76,7 @@ export const fetchClient = {
         ...(config?.headers ?? {}),
       },
       ...(config?.cache ? { cache: config.cache } : {}),
+      ...(config?.next ? { next: config.next } : {}),
     });
     await rejectIfNeeded(response);
     const data: T = await response.json();

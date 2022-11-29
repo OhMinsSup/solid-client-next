@@ -1,4 +1,4 @@
-import type { Nullable } from "./api";
+import type { Nullable } from './api';
 
 export interface TagSchema {
   id: number;
