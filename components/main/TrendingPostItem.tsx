@@ -13,7 +13,7 @@ interface TrendingPostItemProps {
 }
 
 const TrendingPostItem: React.FC<TrendingPostItemProps> = ({ data }) => {
-  const { user, id, title, subTitle } = data;
+  const { user, id, title, subTitle, count } = data;
 
   const [isLoading, setLoading] = useState(true);
 
@@ -67,7 +67,7 @@ const TrendingPostItem: React.FC<TrendingPostItemProps> = ({ data }) => {
             className="mr-4 flex flex-row items-center text-base font-medium text-gray-500"
           >
             <LikeIcon className="mr-2 h-5 w-5 flex-shrink fill-current" />
-            <span>66</span>
+            <span>{count?.postLike}</span>
           </Link>
           {/* Comment */}
           <Link

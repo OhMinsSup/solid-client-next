@@ -6,10 +6,10 @@ import ClientProvider from '@store/client';
 
 export default function RootLayout({ children }: React.PropsWithChildren<any>) {
   return (
-    <ClientProvider>
-      <html>
-        <body className="bg-white leading-6">{children}</body>
-      </html>
-    </ClientProvider>
+    <html>
+      <body className="bg-white leading-6">
+        <ClientProvider>{children} </ClientProvider>
+      </body>
+    </html>
   );
 }

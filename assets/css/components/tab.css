@@ -9,3 +9,15 @@
 .tab-base.active {
   @apply border-b-blue-500 text-blue-500;
 }
+
+.main-tab-container {
+  @apply relative z-20 flex max-w-[100vw] flex-row justify-between border-b px-5 pt-2 font-medium text-gray-600;
+}
+
+.main-tab-base {
+  @apply mr-2 flex flex-row flex-nowrap items-center rounded-t border-b-2 border-transparent px-2 py-3 font-semibold;
+}
+
+.main-tab-base.active {
+  @apply border-b-blue-500 text-blue-500;
+}
