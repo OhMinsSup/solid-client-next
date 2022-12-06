@@ -81,8 +81,8 @@ function PostItem({ post }: PostItemProps) {
                 <div className="relative z-20 h-10 w-10 rounded-full bg-gray-100 xl:h-12 xl:w-12">
                   <Image
                     src={avatarUrl}
-                    width={38}
-                    height={38}
+                    width={40}
+                    height={40}
                     className={classNames(
                       'duration-700 ease-in-out group-hover:opacity-75',
                       isLoading
@@ -168,7 +168,8 @@ function PostItem({ post }: PostItemProps) {
             <Image
               src={thumbnailUrl}
               priority
-              fill
+              width={1600}
+              height={800}
               className={classNames(
                 'min-h-[125px] duration-700 ease-in-out group-hover:opacity-75',
                 isContentLoading

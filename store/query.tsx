@@ -9,13 +9,13 @@ import {
 } from '@tanstack/react-query';
 import Script from 'next/script';
 
-interface Props {
+interface QueryProps {
   dehydratedState: DehydratedState;
   children: React.ReactNode;
 }
 
-function Query({ dehydratedState, children }: Props) {
-  const [queryClient] = useState(new QueryClient());
+function Query({ dehydratedState, children }: QueryProps) {
+  const [queryClient] = useState(() => new QueryClient());
 
   return (
     <>

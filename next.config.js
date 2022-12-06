@@ -6,7 +6,7 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     appDir: true,
-    runtime: 'experimental-edge', // 'node.js' (default) | experimental-edge
+    // runtime: 'experimental-edge', // 'node.js' (default) | experimental-edge
   },
   poweredByHeader: false,
   compress: true,
@@ -18,7 +18,11 @@ const nextConfig = {
       : false,
   },
   images: {
-    domains: ['pub-839fae1de7c64f8eae6caecfd852f848.r2.dev'],
+    domains: [
+      'pub-839fae1de7c64f8eae6caecfd852f848.r2.dev',
+      'velog.velcdn.com',
+      'remix.run',
+    ],
   },
   async headers() {
     return [

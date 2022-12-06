@@ -6,8 +6,8 @@ interface ClientProps {
   children: React.ReactNode;
 }
 
-const Client: React.FC<ClientProps> = ({ children }) => {
+function Client({ children }: ClientProps) {
   return <SSRProvider>{children}</SSRProvider>;
-};
+}
 
 export default Client;

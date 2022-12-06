@@ -3,22 +3,22 @@ import Query from './query';
 import Client from './client';
 import { QueryClient, dehydrate } from '@tanstack/query-core';
 
-interface ContextProps {
+interface ProviderProps {
   children: React.ReactNode;
 }
 
-const Provider: React.FC<ContextProps> = ({ children }) => {
+function Provider({ children }: ProviderProps) {
   const queryClient = new QueryClient();
 
   const provider = (
-    <Query dehydratedState={dehydrate(queryClient)}>
-      <Client>{children}</Client>
-    </Query>
+    <Client>
+      <Query dehydratedState={dehydrate(queryClient)}>{children}</Query>
+    </Client>
   );
 
   queryClient.clear();
 
   return provider;
-};
+}
 
 export default Provider;
