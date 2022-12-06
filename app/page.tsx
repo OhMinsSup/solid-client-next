@@ -4,7 +4,7 @@ import MainTemplate from '@components/main/MainTemplate';
 import { withCookie } from '@api/client';
 
 import { getUserInfoApi } from '@api/user';
-import { getPostsListApi, getSimpleTrendingPostsApi } from '@api/post';
+import { getPostsListApi, getTopPostsApi } from '@api/post';
 import { getTagsApi } from '@api/tags';
 
 // types
@@ -12,7 +12,7 @@ import { Serialize } from '@libs/serialize/serialize';
 
 import type {
   ListRespSchema,
-  SimpleTrendingPostsRespSchema,
+  GetTopPostsRespSchema,
   TagWithPostCountSchema,
   UserRespSchema,
 } from '@api/schema/resp';
@@ -45,8 +45,8 @@ export default async function Page({
 
   const respTags = await getTagsApi({ limit: 5 });
 
-  const respTrending = await getSimpleTrendingPostsApi({
-    dateType: '1W',
+  const respTrending = await getTopPostsApi({
+    duration: 7,
   });
 
   const respPosts = await getPostsListApi({
@@ -62,9 +62,9 @@ export default async function Page({
         })?.list ?? []
       }
       postList={
-        Serialize.default<SimpleTrendingPostsRespSchema>({
+        Serialize.default<GetTopPostsRespSchema>({
           data: respTrending,
-        })?.list ?? []
+        })?.posts ?? []
       }
     >
       <MainContents

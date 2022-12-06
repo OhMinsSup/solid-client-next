@@ -62,7 +62,7 @@ export const API_ENDPOINTS = {
   },
   POSTS: {
     ROOT: '/posts',
-    TRENDING: '/posts/trending/simple',
+    GET_TOP_POSTS: '/posts/get-top-posts',
   },
   FILES: {
     ROOT: '/files',

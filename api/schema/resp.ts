@@ -43,9 +43,8 @@ export interface PostDetailRespSchema extends PostSchema {
   };
 }
 
-export interface SimpleTrendingPostsRespSchema {
-  list: PostDetailRespSchema[];
-  hasNextPage: boolean;
+export interface GetTopPostsRespSchema {
+  posts: PostDetailRespSchema[];
 }
 
 export interface PostListRespSchema

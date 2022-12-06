@@ -5,19 +5,16 @@ import { isEmpty } from '@utils/assertion';
 import type { AppAPI } from '@api/schema/api';
 import type {
   PostListRespSchema,
-  SimpleTrendingPostsRespSchema,
+  GetTopPostsRespSchema,
 } from '@api/schema/resp';
-import type {
-  PostListQuery,
-  SimpleTrendingPostsQuery,
-} from '@api/schema/query';
+import type { PostListQuery, GetTopPostsQuery } from '@api/schema/query';
 
-export async function getSimpleTrendingPostsApi(
-  query: SimpleTrendingPostsQuery,
+export async function getTopPostsApi(
+  query: GetTopPostsQuery,
   config?: RequestConfig,
 ) {
-  const url = `${API_ENDPOINTS.POSTS.TRENDING}?dataType=${query.dateType}`;
-  const response = await fetchClient.get<AppAPI<SimpleTrendingPostsRespSchema>>(
+  const url = `${API_ENDPOINTS.POSTS.GET_TOP_POSTS}?duration=${query.duration}`;
+  const response = await fetchClient.get<AppAPI<GetTopPostsRespSchema>>(
     url,
     config,
   );

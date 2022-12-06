@@ -4,8 +4,6 @@ import classNames from 'classnames';
 
 // hooks
 import { match, P } from 'ts-pattern';
-import { schema } from '@libs/validation/schema';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 // components

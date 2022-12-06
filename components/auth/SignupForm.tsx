@@ -8,8 +8,6 @@ import { useForm } from 'react-hook-form';
 
 // validation
 import { match, P } from 'ts-pattern';
-import { schema } from '@libs/validation/schema';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 // components
 import { LoadingIcon } from '@components/ui/Icon';
@@ -78,7 +76,6 @@ const SignupForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormFieldValues>({
-    resolver: yupResolver(schema.signup()),
     reValidateMode: 'onSubmit',
     criteriaMode: 'firstError',
     defaultValues,

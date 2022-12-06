@@ -2,6 +2,7 @@ import { config } from '@constants/env';
 import QueryString from 'qs';
 
 import type { ReadonlyRequestCookies } from 'next/dist/server/app-render';
+import type { RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
 
 export interface RequestConfig {
   params?: any;
@@ -35,7 +36,9 @@ export function clearCookie() {
   _cookie = '';
 }
 
-export function consumeCookie(cookies: ReadonlyRequestCookies) {
+export function consumeCookie(
+  cookies: ReadonlyRequestCookies | RequestCookies,
+) {
   let cookieString = '';
   const cookieList = cookies.getAll();
   for (const key in cookieList) {
@@ -48,7 +51,7 @@ export function consumeCookie(cookies: ReadonlyRequestCookies) {
 
 export async function withCookie<T>(
   fn: AsyncFn<T>,
-  cookie: ReadonlyRequestCookies,
+  cookie: ReadonlyRequestCookies | RequestCookies,
   isAsync = false,
 ) {
   consumeCookie(cookie);

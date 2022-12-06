@@ -1,3 +1,4 @@
+'use client';
 import { getPostsListApi } from '@api/post';
 import { PostListRespSchema } from '@api/schema/resp';
 import PostItem from '@components/shared/PostItem';
