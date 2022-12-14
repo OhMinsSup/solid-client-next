@@ -40,7 +40,7 @@ const SignupForm = () => {
 
   const [error, setError] = useState<Record<string, string> | null>(null);
 
-  const { isMutating, trigger } = useSignupMutation({
+  const { isLoading, mutateAsync } = useSignupMutation({
     onError: async (err) => {
       if (err instanceof FetchError) {
         const resp = err.response;
@@ -83,7 +83,7 @@ const SignupForm = () => {
 
   const onSubmit: SubmitHandler<FormFieldValues> = async (input) => {
     try {
-      const resp = await trigger(input);
+      const resp = await mutateAsync(input);
       console.log(resp);
     } catch (error) {
       console.error(error);
@@ -198,14 +198,14 @@ const SignupForm = () => {
         className={classNames(
           'mt-6 inline-flex w-full flex-row items-center justify-center self-center rounded-full border border-blue-600 bg-blue-600 py-2 px-20 text-center text-sm font-semibold text-white outline outline-2 outline-offset-2 outline-transparent md:py-2.5 md:text-base',
           {
-            'cursor-not-allowed': isMutating,
+            'cursor-not-allowed': isLoading,
           },
         )}
         type="submit"
-        disabled={isMutating}
+        disabled={isLoading}
       >
-        {isMutating && <LoadingIcon />}
-        {isMutating ? 'loading...' : 'submit'}
+        {isLoading && <LoadingIcon />}
+        {isLoading ? 'loading...' : 'submit'}
       </button>
     </form>
   );

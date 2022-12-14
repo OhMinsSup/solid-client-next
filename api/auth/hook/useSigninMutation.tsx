@@ -1,19 +1,29 @@
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+
 // hooks
-import { QUERIES_KEY } from '@constants/constants';
-import useSWRMutation, { type SWRMutationConfiguration } from 'swr/mutation';
+import { MUTATION_KEY } from '@constants/constants';
 
 // api
-import { signinApi } from '../auth';
+import { signinApi } from '@api/auth/auth';
 
-export function useSigninMutation(
-  otp?: SWRMutationConfiguration<any, any, any>,
-) {
-  const swrKeyLoader = () => {
-    return QUERIES_KEY.AUTH.SIGNIN;
-  };
-  const mutationFn = (_: string, { arg }: Record<string, any>) => {
-    return signinApi(arg);
-  };
+// types
+import type { SigninBody } from '@api/schema/body';
+import type { AppAPI } from '@api/schema/api';
+import type { AuthRespSchema } from '@api/schema/resp';
 
-  return useSWRMutation(swrKeyLoader, mutationFn, otp);
+interface ReturnValue {
+  result: AppAPI<AuthRespSchema>;
+}
+
+interface Options
+  extends UseMutationOptions<ReturnValue, unknown, SigninBody, unknown> {}
+
+export function useSigninMutation(otp?: Options) {
+  return useMutation({
+    mutationKey: [MUTATION_KEY.AUTH.SIGNIN],
+    mutationFn: (body: SigninBody) => {
+      return signinApi(body);
+    },
+    ...otp,
+  });
 }

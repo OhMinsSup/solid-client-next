@@ -1,8 +1,4 @@
 export const QUERIES_KEY = {
-  AUTH: {
-    SIGNUP: 'signupApi',
-    SIGNIN: 'signinApi',
-  },
   ME: ['getUserInfoApi'],
   FILE: {
     ROOT: ['getFileListApi'],
@@ -37,6 +33,13 @@ export const QUERIES_KEY = {
 
       return keys;
     },
+  },
+};
+
+export const MUTATION_KEY = {
+  AUTH: {
+    SIGNUP: 'signupApi',
+    SIGNIN: 'signinApi',
   },
 };
 

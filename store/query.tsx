@@ -7,6 +7,7 @@ import {
   Hydrate,
   DehydratedState,
 } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Script from 'next/script';
 
 interface QueryProps {
@@ -21,6 +22,7 @@ function Query({ dehydratedState, children }: QueryProps) {
     <>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>{children}</Hydrate>
+        <ReactQueryDevtools />
       </QueryClientProvider>
       <Script id="react-query">
         {`window.__REACT_QUERY_STATE__ = ${JSON.stringify(dehydratedState)}`}

@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { z } from 'zod';
 
 export const commonSchema = {
   password: () =>
@@ -55,4 +56,18 @@ export const schema = {
       hasPublishedTime: yup.boolean().optional(),
       publishingDate: yup.date().min(new Date()).optional().nullable(true),
     }),
+};
+
+export const schemaNext = {
+  signin: z.object({
+    email: z.string().email({
+      message: 'Please enter a valid email address',
+    }),
+    password: z
+      .string()
+      .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{8,20}$/, {
+        message:
+          'Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter',
+      }),
+  }),
 };

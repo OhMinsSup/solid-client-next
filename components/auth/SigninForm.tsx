@@ -5,6 +5,10 @@ import classNames from 'classnames';
 // hooks
 import { match, P } from 'ts-pattern';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { schemaNext } from '@libs/validation/schema';
+import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 
 // components
 import { LoadingIcon } from '@components/ui/Icon';
@@ -12,9 +16,13 @@ import ValidationMessage from '@components/ui/Error/ValidationMessage';
 
 // api
 import { useSigninMutation } from '@api/auth';
+import { getUserInfoApi } from '@api/user';
 
 // error
 import { FetchError } from '@api/client';
+
+// constants
+import { PAGE_ENDPOINTS, QUERIES_KEY } from '@constants/constants';
 
 // types
 import type { SubmitHandler } from 'react-hook-form';
@@ -25,6 +33,10 @@ interface FormFieldValues {
 }
 
 const SigninForm = () => {
+  const router = useRouter();
+
+  const queryClient = useQueryClient();
+
   const defaultValues: FormFieldValues = useMemo(() => {
     return {
       email: 'mins5190@naver.com',
@@ -37,15 +49,15 @@ const SigninForm = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormFieldValues>({
+    resolver: zodResolver(schemaNext.signin),
     reValidateMode: 'onSubmit',
     criteriaMode: 'firstError',
     defaultValues,
   });
 
-  const { isMutating, trigger } = useSigninMutation({
+  const { isLoading, mutateAsync } = useSigninMutation({
     onError: async (err) => {
       if (err instanceof FetchError) {
         const resp = err.response;
@@ -71,14 +83,18 @@ const SigninForm = () => {
         }
       }
     },
-    onSuccess(data, key, config) {
-      console.log(data);
+    onSuccess: async () => {
+      await queryClient.prefetchQuery({
+        queryKey: QUERIES_KEY.ME,
+        queryFn: () => getUserInfoApi(),
+      });
+      router.push(PAGE_ENDPOINTS.ROOT);
     },
   });
 
   const onSubmit: SubmitHandler<FormFieldValues> = async (input) => {
     try {
-      const resp = await trigger(input);
+      const resp = await mutateAsync(input);
       console.log(resp);
     } catch (error) {
       console.error(error);
@@ -143,14 +159,14 @@ const SigninForm = () => {
         className={classNames(
           'mt-6 inline-flex w-full flex-row items-center justify-center self-center rounded-full border border-blue-600 bg-blue-600 py-2 px-20 text-center text-sm font-semibold text-white outline outline-2 outline-offset-2 outline-transparent md:py-2.5 md:text-base',
           {
-            'cursor-not-allowed': isMutating,
+            'cursor-not-allowed': isLoading,
           },
         )}
         type="submit"
-        disabled={isMutating}
+        disabled={isLoading}
       >
-        {isMutating && <LoadingIcon />}
-        {isMutating ? 'loading...' : 'submit'}
+        {isLoading && <LoadingIcon />}
+        {isLoading ? 'loading...' : 'submit'}
       </button>
     </form>
   );
