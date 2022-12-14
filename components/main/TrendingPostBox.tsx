@@ -1,15 +1,11 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import { useRouter, useSearchParams } from 'next/navigation';
 
 // components
 import RightContentBox from './RightContentBox';
 import TrendingPostList from './TrendingPostList';
 import { Tab } from '@headlessui/react';
-
-// hooks
-import { usePathname } from 'next/navigation';
 
 // types
 import type { PostDetailRespSchema } from '@api/schema/resp';
@@ -19,42 +15,27 @@ interface TrendingPostBoxProps {
 }
 
 function TrendingPostBox({ postList }: TrendingPostBoxProps) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const KEY_MAP_RECORD: Record<number, '1W' | '1M' | '3M' | '6M'> =
-    useMemo(() => {
-      return {
-        0: '1W',
-        1: '1M',
-        2: '3M',
-        3: '6M',
-      };
-    }, []);
+  const KEY_MAP_RECORD: Record<number, string> = useMemo(() => {
+    return {
+      0: '7',
+      1: '30',
+      2: '90',
+      3: '180',
+    };
+  }, []);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const onChangeTab = useCallback(
-    (index: number) => {
-      router.replace('/?dateType=' + KEY_MAP_RECORD[index]);
-    },
-    [KEY_MAP_RECORD, router],
-  );
-
-  useEffect(() => {
-    const dateType = searchParams.get('dateType') as '1W' | '1M' | '3M' | '6M';
-    if (!dateType) return;
-    const index = Object.values(KEY_MAP_RECORD).indexOf(dateType);
+  const onChangeTab = useCallback((index: number) => {
     setSelectedIndex(index);
-  }, [searchParams]);
+  }, []);
 
   return (
     <RightContentBox title="Trending" to="/">
       <Tab.Group selectedIndex={selectedIndex} onChange={onChangeTab}>
         <Tab.List className="tab-list-base">
           <Tab
-            value="1W"
+            value="7"
             className={({ selected }) =>
               classNames('tab-base', {
                 active: selected,
@@ -64,7 +45,7 @@ function TrendingPostBox({ postList }: TrendingPostBoxProps) {
             1 week
           </Tab>
           <Tab
-            value="1M"
+            value="30"
             className={({ selected }) =>
               classNames('tab-base', {
                 active: selected,
@@ -74,7 +55,7 @@ function TrendingPostBox({ postList }: TrendingPostBoxProps) {
             1 months
           </Tab>
           <Tab
-            value="3M"
+            value="90"
             className={({ selected }) =>
               classNames('tab-base', {
                 active: selected,
@@ -84,7 +65,7 @@ function TrendingPostBox({ postList }: TrendingPostBoxProps) {
             3 months
           </Tab>
           <Tab
-            value="6M"
+            value="180"
             className={({ selected }) =>
               classNames('tab-base', {
                 active: selected,
@@ -96,16 +77,29 @@ function TrendingPostBox({ postList }: TrendingPostBoxProps) {
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel className="space-y-4 divide-y">
-            <TrendingPostList type="1W" postList={postList} />
+            <TrendingPostList
+              duration={KEY_MAP_RECORD[0]}
+              enabled={selectedIndex === 0}
+              initialData={postList}
+            />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
-            <TrendingPostList type="1M" postList={postList} />
+            <TrendingPostList
+              duration={KEY_MAP_RECORD[1]}
+              enabled={selectedIndex === 1}
+            />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
-            <TrendingPostList type="3M" postList={postList} />
+            <TrendingPostList
+              duration={KEY_MAP_RECORD[2]}
+              enabled={selectedIndex === 2}
+            />
           </Tab.Panel>
           <Tab.Panel className="space-y-4 divide-y">
-            <TrendingPostList type="6M" postList={postList} />
+            <TrendingPostList
+              duration={KEY_MAP_RECORD[3]}
+              enabled={selectedIndex === 3}
+            />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>

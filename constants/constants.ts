@@ -15,7 +15,13 @@ export const QUERIES_KEY = {
       }
       return keys;
     },
-    TRENDING: (type: string) => ['getSimpleTrendingPostsApi', type],
+    TOP_POSTS: (duration?: number) => {
+      let keys: any[] = ['getTopPostsApi'];
+      if (duration) {
+        keys = keys.concat({ duration });
+      }
+      return keys;
+    },
   },
   TAGS: {
     ROOT: (keyword?: string, type?: string) => {

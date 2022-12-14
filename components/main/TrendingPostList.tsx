@@ -1,22 +1,48 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+
+// components
 import TrendingPostItem from './TrendingPostItem';
 
+// utils
 import { isNull, isUndefined } from '@utils/assertion';
-import type { PostDetailRespSchema } from '@api/schema/resp';
+
+// hooks
+import { useTopPostQuery } from '@api/post/hook/useTopPostQuery';
 
 interface TrendingPostListProps {
-  type: '1W' | '1M' | '3M' | '6M';
-  postList?: PostDetailRespSchema[];
+  enabled: boolean;
+  duration: string;
+  initialData?: any;
 }
 
-function TrendingPostList({ type, postList }: TrendingPostListProps) {
-  if (isNull(postList) || isUndefined(postList)) return null;
+function TrendingPostList({
+  duration,
+  initialData,
+  enabled,
+}: TrendingPostListProps) {
+  const { data } = useTopPostQuery(
+    {
+      duration: Number(duration),
+    },
+    {
+      enabled,
+      initialData,
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: 1000 * 60 * 60 * 24,
+    },
+  );
+
+  const posts = useMemo(() => {
+    return data?.result?.result?.posts ?? [];
+  }, [data]);
+
+  if (isNull(posts) || isUndefined(posts)) return null;
 
   return (
     <>
-      {postList?.map((item) => (
+      {posts?.map((item) => (
         <TrendingPostItem
-          key={`trending-simple-post-${type}-item-${item.id}`}
+          key={`trending-simple-post-${duration}-item-${item.id}`}
           data={item}
         />
       ))}
