@@ -70,4 +70,28 @@ export const schemaNext = {
           'Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter',
       }),
   }),
+  signup: z
+    .object({
+      username: z.string().min(2).max(20),
+      email: z.string().email({
+        message: 'Please enter a valid email address',
+      }),
+      password: z
+        .string()
+        .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{8,20}$/, {
+          message:
+            'Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter',
+        }),
+      name: z.string().optional(),
+      confirmPassword: z
+        .string()
+        .regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%&^*+=-\d])(?=.*[0-9]).{8,20}$/, {
+          message:
+            'Password must be at least 8 characters long and contain at least one number, one lowercase and one uppercase letter',
+        }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: 'Passwords must match',
+      path: ['confirmPassword'],
+    }),
 };

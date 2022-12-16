@@ -8,6 +8,8 @@ import {
   RecentIcon,
 } from '@components/ui/Icon';
 import PersonalizedList from './PersonalizedList';
+import FeaturedList from './FeaturedList';
+import RecentList from './RecentList';
 
 // types
 import type { PostListRespSchema } from '@api/schema/resp';
@@ -60,8 +62,12 @@ function MainContents({ postList }: MainContentsProps) {
             <Tab.Panel>
               <PersonalizedList postList={postList} />
             </Tab.Panel>
-            <Tab.Panel>FeaturedList</Tab.Panel>
-            <Tab.Panel>RecentList</Tab.Panel>
+            <Tab.Panel>
+              <FeaturedList postList={postList} />
+            </Tab.Panel>
+            <Tab.Panel>
+              <RecentList postList={postList} />
+            </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>

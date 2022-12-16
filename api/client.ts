@@ -41,9 +41,10 @@ export function consumeCookie(
 ) {
   let cookieString = '';
   const cookieList = cookies.getAll();
-  for (const key in cookieList) {
-    cookieString += `${key}=${cookieList[key]};`;
-  }
+  cookieList.map((cookie) => {
+    cookieString += `${cookie.name}=${cookie.value};`;
+  });
+
   if (cookieString) {
     setClientCookie(cookieString);
   }

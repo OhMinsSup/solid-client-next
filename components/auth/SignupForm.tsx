@@ -5,9 +5,15 @@ import classNames from 'classnames';
 // hooks
 import { useSignupMutation } from '@api/auth';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { schemaNext } from '@libs/validation/schema';
+import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 
 // validation
 import { match, P } from 'ts-pattern';
+import { getUserInfoApi } from '@api/user';
+import { useAuthStore } from '@store/useAuthStore';
 
 // components
 import { LoadingIcon } from '@components/ui/Icon';
@@ -16,8 +22,12 @@ import ValidationMessage from '@components/ui/Error/ValidationMessage';
 // error
 import { FetchError } from '@api/client';
 
+import { PAGE_ENDPOINTS, QUERIES_KEY } from '@constants/constants';
+
 // types
 import type { SubmitHandler } from 'react-hook-form';
+import type { AppAPI } from '@api/schema/api';
+import type { UserRespSchema } from '@api/schema/resp';
 
 interface FormFieldValues {
   username: string;
@@ -28,6 +38,10 @@ interface FormFieldValues {
 }
 
 const SignupForm = () => {
+  const router = useRouter();
+
+  const queryClient = useQueryClient();
+
   const defaultValues: FormFieldValues = useMemo(() => {
     return {
       username: 'veloss',
@@ -39,8 +53,9 @@ const SignupForm = () => {
   }, []);
 
   const [error, setError] = useState<Record<string, string> | null>(null);
+  const { setAuth } = useAuthStore();
 
-  const { isLoading, mutateAsync } = useSignupMutation({
+  const { isLoading, mutate } = useSignupMutation({
     onError: async (err) => {
       if (err instanceof FetchError) {
         const resp = err.response;
@@ -66,8 +81,22 @@ const SignupForm = () => {
         }
       }
     },
-    onSuccess(data, key, config) {
-      console.log(data);
+    onSuccess: async () => {
+      await queryClient.prefetchQuery({
+        queryKey: QUERIES_KEY.ME,
+        queryFn: () => getUserInfoApi(),
+      });
+
+      const data = queryClient.getQueryData<{
+        result: AppAPI<UserRespSchema>;
+      }>(QUERIES_KEY.ME);
+
+      const profile = data?.result.result;
+      if (profile) {
+        setAuth(true, profile);
+      }
+
+      router.replace(PAGE_ENDPOINTS.ROOT);
     },
   });
 
@@ -76,18 +105,14 @@ const SignupForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormFieldValues>({
+    resolver: zodResolver(schemaNext.signup),
     reValidateMode: 'onSubmit',
     criteriaMode: 'firstError',
     defaultValues,
   });
 
-  const onSubmit: SubmitHandler<FormFieldValues> = async (input) => {
-    try {
-      const resp = await mutateAsync(input);
-      console.log(resp);
-    } catch (error) {
-      console.error(error);
-    }
+  const onSubmit: SubmitHandler<FormFieldValues> = (input) => {
+    mutate(input);
   };
 
   return (
