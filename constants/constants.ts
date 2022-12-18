@@ -41,6 +41,9 @@ export const MUTATION_KEY = {
     SIGNUP: 'signupApi',
     SIGNIN: 'signinApi',
   },
+  FILE: {
+    IMAGE_UPLOAD: 'imageUploadApi',
+  },
 };
 
 export const ASSET_URL = {

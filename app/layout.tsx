@@ -1,6 +1,7 @@
 import '@assets/css/globals.css';
+import 'rc-drawer/assets/index.css';
 import React from 'react';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { withCookie } from '@api/client';
 
 // api

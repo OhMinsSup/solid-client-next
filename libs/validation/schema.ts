@@ -94,4 +94,21 @@ export const schemaNext = {
       message: 'Passwords must match',
       path: ['confirmPassword'],
     }),
+  write: z.object({
+    title: z.string().max(1000),
+    subTitle: z.string().max(100).optional(),
+    description: z.string().min(140).max(150),
+    content: z.string(),
+    thumbnail: z
+      .object({
+        idx: z.number().optional(),
+        url: z.string().url(),
+      })
+      .optional(),
+    tags: z.array(z.string()).max(5).optional(),
+    disabledComment: z.boolean().optional(),
+    isPublic: z.boolean().optional(),
+    hasPublishedTime: z.boolean().optional(),
+    publishingDate: z.date().min(new Date()).optional(),
+  }),
 };
