@@ -12,11 +12,14 @@ import Title from '@components/create/Title';
 import SubTitle from '@components/create/SubTitle';
 import CoverImagePopover from '@components/create/CoverImagePopover';
 import PublishDrawer from '@components/create/PublishDrawer';
+import Editor from '@components/ui/Editor/Editor';
 
 import type { FormFieldValues } from '../layout';
+import type EditorJS from '@editorjs/editorjs';
 
 function Page() {
-  const formRef = useRef<HTMLFormElement>(null);
+  const editorRef = useRef<EditorJS | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   const { watch, setValue } = useFormContext<FormFieldValues>();
 
@@ -31,7 +34,7 @@ function Page() {
     });
   }, [setValue]);
 
-  const onPublich = useCallback(() => {
+  const onPublich = useCallback(async () => {
     const ele = getTargetElement(formRef);
     ele?.dispatchEvent(
       new Event('submit', {
@@ -62,7 +65,9 @@ function Page() {
         )}
         <Title />
         <SubTitle />
-        <div className="relative z-20">{/*  */}</div>
+        <div className="relative z-20">
+          <Editor ref={editorRef} />
+        </div>
       </form>
       <PublishDrawer onPublich={onPublich} />
     </>

@@ -19,6 +19,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@editorjs/code": "^2.8.0",
+    "@editorjs/editorjs": "^2.26.4",
+    "@editorjs/embed": "^2.5.3",
+    "@editorjs/header": "^2.7.0",
+    "@editorjs/inline-code": "^1.4.0",
+    "@editorjs/link": "^2.5.0",
+    "@editorjs/list": "^1.8.0",
+    "@editorjs/paragraph": "^2.9.0",
+    "@editorjs/table": "^2.1.2",
     "@headlessui/react": "^1.7.5",
     "@hookform/resolvers": "^2.9.10",
     "@tanstack/react-query": "^4.20.2",
@@ -37,6 +46,7 @@
     "react-stately": "^3.19.0",
     "react-use": "^17.4.0",
     "react-virtuoso": "^3.1.5",
+    "tailwindcss-animate": "^1.0.5",
     "ts-pattern": "^4.0.6",
     "use-debounce": "^9.0.2",
     "yup": "^0.32.11",
@@ -44,6 +54,7 @@
     "zustand": "^4.1.5"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.8",
     "@types/node": "18.11.7",
     "@types/qs": "6.9.7",
     "@types/react": "18.0.26",
