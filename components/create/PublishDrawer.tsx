@@ -20,7 +20,7 @@ interface PublishDrawerProps {
 const PublishDrawer: React.FC<PublishDrawerProps> = ({ onPublich }) => {
   const { visible, closeSetting } = useWriteStore();
 
-  const is768px = useMedia('(min-width: 768px)');
+  const is768px = useMedia('(min-width: 768px)', false);
 
   return (
     <Drawer

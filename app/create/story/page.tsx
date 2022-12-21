@@ -1,11 +1,14 @@
 'use client';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { useFormContext } from 'react-hook-form';
+import { useInterval } from 'react-use';
 import { useWriteStore } from '@store/useWriteStore';
 
 import { TypographyIcon } from '@components/ui/Icon';
 import { getTargetElement } from '@libs/browser-utils/dom';
+
+import { useWriteContext } from '../context';
 
 import CoverImage from '@components/create/CoverImage';
 import Title from '@components/create/Title';
@@ -25,6 +28,8 @@ function Page() {
 
   const { openSubTitle, visible } = useWriteStore();
 
+  const { setEditorJS, editorJS } = useWriteContext();
+
   const watchThumbnail = watch('thumbnail');
 
   const onRemoveThumbnail = useCallback(() => {
@@ -34,15 +39,30 @@ function Page() {
     });
   }, [setValue]);
 
+  const syncEditorContent = useCallback(async () => {
+    const blocks = await editorJS?.save();
+    const data = JSON.stringify(blocks);
+
+    setValue('content', data, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+
+    return data;
+  }, [editorJS, setValue]);
+
   const onPublich = useCallback(async () => {
+    await syncEditorContent();
+
     const ele = getTargetElement(formRef);
+
     ele?.dispatchEvent(
       new Event('submit', {
         cancelable: true,
         bubbles: true,
       }),
     );
-  }, []);
+  }, [syncEditorContent]);
 
   return (
     <>
@@ -66,7 +86,7 @@ function Page() {
         <Title />
         <SubTitle />
         <div className="relative z-20">
-          <Editor ref={editorRef} />
+          <Editor ref={editorRef} onReady={setEditorJS} />
         </div>
       </form>
       <PublishDrawer onPublich={onPublich} />

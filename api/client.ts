@@ -91,17 +91,18 @@ export const fetchClient = {
     };
   },
   async post<T>(url: string, body?: any, config: RequestConfig = {}) {
+    const isFormData = body instanceof FormData;
     const response = await fetch(this.baseUrl.concat(url), {
       method: 'POST',
       ...(typeof window === 'undefined' ? {} : { credentials: 'include' }),
       headers: {
-        ...(body ? { 'Content-Type': 'application/json' } : {}),
+        ...(body && !isFormData ? { 'Content-Type': 'application/json' } : {}),
         Cookie: _cookie,
         ...(config.headers ?? {}),
       },
       ...(config?.cache ? { cache: config.cache } : {}),
       signal: config.signal,
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
     });
     await rejectIfNeeded(response);
     const data: T = await response.json();

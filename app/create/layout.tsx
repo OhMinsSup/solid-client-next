@@ -11,6 +11,7 @@ import WriteTemplate from '@components/create/WriteTemplate';
 
 // types
 import type { FileSchema } from '@api/schema/file';
+import { WriteContextProvider } from './context';
 
 export interface FormFieldValues {
   title: string;
@@ -49,8 +50,10 @@ export default function CreateStoryLayout({
   });
 
   return (
-    <FormProvider {...methods}>
-      <WriteTemplate header={<WriterHeader />}>{children}</WriteTemplate>
-    </FormProvider>
+    <WriteContextProvider>
+      <FormProvider {...methods}>
+        <WriteTemplate header={<WriterHeader />}>{children}</WriteTemplate>
+      </FormProvider>
+    </WriteContextProvider>
   );
 }
