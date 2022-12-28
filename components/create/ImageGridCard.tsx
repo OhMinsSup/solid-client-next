@@ -1,12 +1,22 @@
 'use client';
-import React, { useCallback, useImperativeHandle, useRef } from 'react';
+import React, {
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
+import classNames from 'classnames';
+
 import { useFormContext } from 'react-hook-form';
 
 // types
 import type { FileSchema } from '@api/schema/file';
 import type { FormFieldValues } from 'app/create/layout';
+import Image from 'next/image';
 
-interface ImageGridCardProps extends Omit<FileSchema, 'deletedAt'> {}
+interface ImageGridCardProps extends Omit<FileSchema, 'deletedAt'> {
+  index: number;
+}
 
 const ImageGridCard: React.ForwardRefRenderFunction<
   HTMLDivElement,
@@ -16,6 +26,8 @@ const ImageGridCard: React.ForwardRefRenderFunction<
   const divRef = useRef<HTMLDivElement | null>(null);
 
   const { setValue } = useFormContext<FormFieldValues>();
+
+  const [isLoading, setLoading] = useState(true);
 
   useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(
     ref,
@@ -41,11 +53,25 @@ const ImageGridCard: React.ForwardRefRenderFunction<
       >
         <div className="relative pb-[56.25%]">
           <div className="absolute inset-0">
-            <img
+            <Image
+              src={props.url}
+              alt={props.name}
+              fill
+              priority={[0, 1, 2, 3, 4, 5].includes(props.index)}
+              className={classNames(
+                'duration-700 ease-in-out group-hover:opacity-75',
+                isLoading
+                  ? 'scale-110 blur-2xl grayscale'
+                  : 'scale-100 blur-0 grayscale-0',
+              )}
+              sizes="(max-width: 640px) 100vw, 640px"
+              onLoadingComplete={() => setLoading(false)}
+            />
+            {/* <img
               src={props.url}
               alt="MacBook Pro, white ceramic mug,and black smartphone on table"
               className="h-full w-full"
-            />
+            /> */}
           </div>
         </div>
       </button>

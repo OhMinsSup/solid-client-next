@@ -12,7 +12,6 @@ import type {
   GetTopPostsRespSchema,
   TagWithPostCountSchema,
 } from '@api/schema/resp';
-import MainContents from '@components/main/MainContents';
 
 export default async function Page(props: {
   params?: any;
@@ -42,11 +41,7 @@ export default async function Page(props: {
         })?.posts ?? []
       }
     >
-      <MainContents
-        postList={Serialize.default({
-          data: respPosts,
-        })}
-      />
+      Content
     </MainTemplate>
   );
 }

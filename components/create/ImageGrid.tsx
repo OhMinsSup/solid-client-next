@@ -65,8 +65,12 @@ const ImageGrid: React.FC<ImageGridProps> = () => {
   return (
     <div className="h-80 overflow-y-scroll" ref={ref}>
       <div className="grid grid-cols-8 gap-4 md:grid-cols-9">
-        {list.map((item) => (
-          <ImageGridCard key={`photo-item-${item.id}`} {...item} />
+        {list.map((item, index) => (
+          <ImageGridCard
+            key={`photo-item-${item.id}`}
+            index={index}
+            {...item}
+          />
         ))}
       </div>
     </div>

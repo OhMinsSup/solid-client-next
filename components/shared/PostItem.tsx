@@ -83,6 +83,7 @@ function PostItem({ post }: PostItemProps) {
                     src={avatarUrl}
                     width={40}
                     height={40}
+                    priority
                     className={classNames(
                       'duration-700 ease-in-out group-hover:opacity-75',
                       isLoading

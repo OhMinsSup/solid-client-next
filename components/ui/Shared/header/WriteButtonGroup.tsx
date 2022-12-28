@@ -5,7 +5,7 @@ import { CreateIcon } from '@components/ui/Icon';
 interface WriteButtonGroupProps {}
 const WriteButtonGroup: React.FC<WriteButtonGroupProps> = () => {
   return (
-    <div className="relative hidden md:block">
+    <div className="relative mr-2 hidden md:block">
       <div className="flex flex-row rounded-full bg-blue-500 text-white">
         <Link
           href={'/'}
